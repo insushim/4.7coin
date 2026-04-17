@@ -4,6 +4,9 @@
 
 이미 동작 확인됨. 맥북에서 바로 돌아감.
 
+> ⚠️ **`npm run build` 이후에 `npm run dev`를 돌리면 500 에러** — Next.js가 프로덕션 빌드 캐시를 dev 모드에서 재사용하려다 실패합니다.
+> 이런 경우: `npm run dev:clean` (`.next` 먼저 삭제 후 dev 실행).
+
 ```bash
 # 사전: brew install postgresql@16 redis && brew services start postgresql@16 redis
 createuser -s quantsage && psql postgres -c "ALTER USER quantsage WITH PASSWORD 'change_me_strong';"
