@@ -67,7 +67,11 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "B", "UP", "ASYNC"]
-ignore = ["E501", "B008"]
+# N803/N806: allow X, y (ML convention)
+# N818: our exceptions use domain names (KillSwitchActive, etc.), not Error suffix
+# B905: explicit strict= on zip() is Python 3.10+ only, not enforcing
+# B904: legacy raise-from
+ignore = ["E501", "B008", "N803", "N806", "N818", "B905", "B904"]
 
 [tool.mypy]
 python_version = "3.12"

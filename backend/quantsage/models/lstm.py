@@ -41,7 +41,6 @@ class LSTMDirectionModel:
             self._torch_ok = False
 
     def _build(self, input_size: int):
-        import torch
         import torch.nn as nn
 
         class _Net(nn.Module):

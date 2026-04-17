@@ -12,8 +12,8 @@ import hashlib
 import json
 import time
 import uuid
+from collections.abc import AsyncIterator
 from decimal import Decimal
-from typing import AsyncIterator
 from urllib.parse import urlencode
 
 import httpx

@@ -14,10 +14,10 @@ Guarantees:
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Awaitable, Callable
 
 from sqlalchemy import select
 
@@ -25,7 +25,7 @@ from ..config import settings
 from ..db.models import OrderRecord
 from ..db.session import get_session
 from ..exceptions import KillSwitchActive, RiskBlockedError
-from ..exchanges.base import AbstractExchange, Order, OrderSide, OrderType
+from ..exchanges.base import AbstractExchange, Order, OrderSide
 from ..notifications.telegram import telegram
 from ..risk.aggregator import OrderProposal, RiskAggregator, RiskContext, RiskDecision
 from ..risk.kill_switch import kill_switch

@@ -8,9 +8,10 @@ execution router stay portable. All errors are translated to
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import AsyncIterator, Literal
+from typing import Literal
 
 OrderSide = Literal["buy", "sell"]
 OrderType = Literal["limit", "market"]

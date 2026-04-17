@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
-from decimal import Decimal
 
 import pandas as pd
 

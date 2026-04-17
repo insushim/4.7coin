@@ -13,12 +13,11 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 from .engine import BacktestEngine, EngineConfig
-from .metrics import PerformanceMetrics, compute_all, deflated_sharpe
-from .simulator import BacktestResult, SimulatorConfig
+from .metrics import PerformanceMetrics, compute_all
+from .simulator import SimulatorConfig
 
 
 @dataclass

@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from decimal import Decimal
+from datetime import UTC, datetime
 
 from sqlalchemy import delete, select
 from sqlalchemy.dialects.postgresql import insert
@@ -27,7 +26,7 @@ async def bulk_insert_ohlcv(rows: list[dict]) -> int:
 
 def candle_to_row(exchange: str, symbol: str, timeframe: str, candle) -> dict:
     return {
-        "time": datetime.fromtimestamp(candle.timestamp / 1000, tz=timezone.utc),
+        "time": datetime.fromtimestamp(candle.timestamp / 1000, tz=UTC),
         "exchange": exchange,
         "symbol": symbol,
         "timeframe": timeframe,
