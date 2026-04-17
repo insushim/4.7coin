@@ -1,6 +1,5 @@
-"""ML placeholder.
+"""ML models (XGBoost baseline, optional LSTM)."""
 
-The full stack (LSTM + XGBoost + SHAP + Optuna) ships in a follow-up commit
-once the core trading loop is verified in paper. Keeping the namespace live so
-feature-flagging future models doesn't require new imports.
-"""
+from .xgb import XGBConfig, XGBDirectionModel, train_on_ohlcv
+
+__all__ = ["XGBConfig", "XGBDirectionModel", "train_on_ohlcv"]

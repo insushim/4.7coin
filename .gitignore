@@ -13,7 +13,12 @@ htmlcov/
 data/historical/
 data/models/*.pt
 data/models/*.pkl
+data/models/*.json
+data/models/*.json.meta
+data/reports/
 data/logs/
+backend/alembic/versions/__pycache__/
+next-env.d.ts
 node_modules/
 .next/
 out/

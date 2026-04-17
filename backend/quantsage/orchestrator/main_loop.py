@@ -16,6 +16,7 @@ from ..config import settings
 from ..exchanges import AbstractExchange, create_exchange
 from ..exchanges.base import Candle
 from ..execution.dry_run import PaperExecutor
+from ..execution.live import LiveExecutor
 from ..features.regime import Regime, detect_regime
 from ..risk.aggregator import OrderProposal, RiskAggregator, RiskContext
 from ..risk.black_swan import BlackSwanDetector
@@ -62,6 +63,9 @@ class MainLoop:
         self.ensemble = default_ensemble()
         self.risk = RiskAggregator(min_confidence=settings.min_confidence)
         self.black_swan = BlackSwanDetector()
+        self.live = LiveExecutor(
+            exchange=self.exchange, risk=self.risk, paper_mirror=self.paper
+        )
         self.state = LoopState()
 
     async def _handle_symbol(self, symbol: str) -> None:
@@ -113,7 +117,17 @@ class MainLoop:
             return
 
         if settings.is_live:
-            logger.warning(f"{symbol} live execution not yet enabled in this build")
+            async def _build_ctx() -> RiskContext:
+                return ctx
+            exec_result = await self.live.submit(
+                proposal=proposal,
+                build_context=_build_ctx,
+                reference_price=last_price,
+            )
+            logger.info(
+                f"{symbol} LIVE accepted={exec_result.accepted} "
+                f"orders={len(exec_result.orders)} reason={exec_result.reason}"
+            )
             return
 
         side = "buy" if decision.direction == Direction.BUY else "sell"

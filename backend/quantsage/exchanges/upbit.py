@@ -108,7 +108,11 @@ class UpbitExchange(AbstractExchange):
         return await self._get("/v1/market/all?isDetails=false")
 
     async def fetch_ohlcv(
-        self, symbol: str, timeframe: str = "1m", limit: int = 200
+        self,
+        symbol: str,
+        timeframe: str = "1m",
+        limit: int = 200,
+        to: str | None = None,
     ) -> list[Candle]:
         tf_map = {
             "1m": ("/v1/candles/minutes/1", {}),
@@ -122,7 +126,9 @@ class UpbitExchange(AbstractExchange):
         if timeframe not in tf_map:
             raise ExchangeError(f"Unsupported timeframe: {timeframe}")
         path, base_params = tf_map[timeframe]
-        params = {"market": symbol, "count": min(limit, 200), **base_params}
+        params: dict = {"market": symbol, "count": min(limit, 200), **base_params}
+        if to:
+            params["to"] = to  # ISO8601 or YYYY-MM-DD HH:MM:SS
         raw = await self._get(path, params)
         out: list[Candle] = []
         for row in reversed(raw):
