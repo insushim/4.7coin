@@ -36,46 +36,57 @@ class EnsembleVoter:
         self.min_confidence = min_confidence or settings.min_confidence
 
     def decide(self, df: pd.DataFrame, regime: Regime) -> EnsembleDecision:
+        """Vote among strategies that had an opinion (direction != HOLD).
+
+        Counting against *all* N strategies punished specialists (e.g. the
+        mean-reverter sleeps in BULL regimes by design, so it can never "vote
+        yes" for a trend trade). We now tally BUY vs SELL among the
+        non-abstainers and require:
+          1) at least `min_voters` directional signals (default 2)
+          2) winning side > losing side (strict)
+          3) weighted confidence >= threshold (raised when there's dissent)
+        """
         signals: dict[str, Signal] = {s.name: s.generate_signal(df, regime) for s in self.strategies}
         buys = [s for s in signals.values() if s.direction == Direction.BUY]
         sells = [s for s in signals.values() if s.direction == Direction.SELL]
+        voters = len(buys) + len(sells)
+        min_voters = 2
 
-        total = len(self.strategies)
-        threshold_majority = total // 2 + 1
+        if voters < min_voters:
+            return EnsembleDecision(
+                Direction.HOLD,
+                0.0,
+                signals,
+                f"Only {voters} directional voter(s); need {min_voters}",
+            )
 
-        if len(buys) >= threshold_majority and len(buys) > len(sells):
-            winning = buys
-            losing = sells
-            direction = Direction.BUY
-        elif len(sells) >= threshold_majority and len(sells) > len(buys):
-            winning = sells
-            losing = buys
-            direction = Direction.SELL
+        if len(buys) > len(sells):
+            winning, losing, direction = buys, sells, Direction.BUY
+        elif len(sells) > len(buys):
+            winning, losing, direction = sells, buys, Direction.SELL
         else:
             return EnsembleDecision(
                 Direction.HOLD,
                 0.0,
                 signals,
-                f"No majority: BUY={len(buys)}, SELL={len(sells)}, HOLD={total - len(buys) - len(sells)}",
+                f"Tie: BUY={len(buys)}, SELL={len(sells)}",
             )
 
         conf = sum(s.confidence for s in winning) / len(winning)
-        if losing:  # opposing signals → raise bar
-            bar = max(self.min_confidence, 0.75)
-        else:
-            bar = self.min_confidence
+        # raise bar when any strategy disagreed
+        bar = max(self.min_confidence, 0.75) if losing else self.min_confidence
 
         if conf < bar:
             return EnsembleDecision(
                 Direction.HOLD,
                 conf,
                 signals,
-                f"confidence {conf:.2f} < threshold {bar:.2f}",
+                f"{direction} would win {len(winning)}-{len(losing)} but conf {conf:.2f} < {bar:.2f}",
             )
 
         return EnsembleDecision(
             direction,
             conf,
             signals,
-            f"{direction} majority {len(winning)}/{total}, conf={conf:.2f}",
+            f"{direction} wins {len(winning)}-{len(losing)}, conf={conf:.2f}",
         )

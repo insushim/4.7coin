@@ -36,7 +36,7 @@ type BacktestResp = {
 
 export default function BacktestPage() {
   const [symbol, setSymbol] = useState("KRW-BTC");
-  const [bars, setBars] = useState(200);
+  const [bars, setBars] = useState(2000);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<BacktestResp | null>(null);
@@ -86,13 +86,18 @@ export default function BacktestPage() {
               />
             </div>
             <div>
-              <label className="block text-sm text-muted mb-1">바 수 (최대 200)</label>
+              <label className="block text-sm text-muted mb-1">바 수 (권장 1500+)</label>
               <input
                 type="number"
+                min={300}
+                max={4000}
                 value={bars}
                 onChange={(e) => setBars(Number(e.target.value))}
                 className="w-full px-3 py-2.5 rounded bg-bg border border-border outline-none"
               />
+              <p className="text-xs text-muted mt-1">
+                DB에 최대 4299바 (180일치). 300 미만은 거래 0회.
+              </p>
             </div>
             <div className="flex items-end">
               <button onClick={run} disabled={loading} className="btn btn-primary w-full disabled:opacity-50">
