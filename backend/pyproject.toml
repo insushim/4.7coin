@@ -3,7 +3,6 @@ name = "quantsage"
 version = "0.1.0"
 description = "AI Crypto Trader — Risk-First, Explainable, Regime-Aware"
 requires-python = ">=3.12"
-readme = "../README.md"
 license = {text = "MIT"}
 dependencies = [
     "fastapi>=0.115",
