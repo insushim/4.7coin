@@ -1,9 +1,0 @@
-2:I[19107,[],"ClientPageRoot"]
-3:I[18068,["972","static/chunks/972-504d0a66feb1f19b.js","931","static/chunks/app/page-d06bb011553e2c42.js"],"default",1]
-4:I[4707,[],""]
-5:I[13490,["972","static/chunks/972-504d0a66feb1f19b.js","601","static/chunks/app/error-7138b3fa4108e19f.js"],"default"]
-6:I[36423,[],""]
-7:I[72972,["972","static/chunks/972-504d0a66feb1f19b.js","160","static/chunks/app/not-found-ae050a5d8eb73f02.js"],""]
-0:["aOVyMnfQSLQC6eUpEGVVo",[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],["",{"children":["__PAGE__",{},[["$L1",["$","$L2",null,{"props":{"params":{},"searchParams":{}},"Component":"$3"}],null],null],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/65ea233ab7569409.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"ko","className":"dark","children":["$","body",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","main",null,{"className":"min-h-screen flex items-center justify-center","children":["$","div",null,{"className":"text-center","children":[["$","h1",null,{"className":"text-5xl font-bold","children":"404"}],["$","p",null,{"className":"text-muted mt-2","children":"페이지를 찾을 수 없습니다"}],["$","$L7",null,{"href":"/","className":"btn btn-primary mt-6 inline-block","children":"홈으로"}]]}]}],"notFoundStyles":[]}]}]}]],null],null],["$L8",null]]]]
-8:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","1",{"charSet":"utf-8"}],["$","title","2",{"children":"QuantSage — AI Crypto Trader"}],["$","meta","3",{"name":"description","content":"Risk-first, explainable, regime-aware crypto trading dashboard"}]]
-1:null
