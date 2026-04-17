@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY pyproject.toml ./
 RUN pip install --upgrade pip && \
-    pip install -e .
+    pip install -e . && \
+    pip install scikit-learn xgboost alembic
 
 COPY . .
 

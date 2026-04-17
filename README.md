@@ -2,6 +2,7 @@
 
 > 프로덕션급 AI 코인 자동매매 시스템. 리스크 우선·설명가능·레짐 인식·앙상블·투명한 검증.
 
+[![CI](https://github.com/insushim/4.7coin/actions/workflows/ci.yml/badge.svg)](https://github.com/insushim/4.7coin/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)]()
 [![Python](https://img.shields.io/badge/Python-3.12+-green.svg)]()
 [![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)]()
