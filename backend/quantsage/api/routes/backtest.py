@@ -4,10 +4,12 @@ from __future__ import annotations
 
 from typing import Annotated
 
+import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException
 
 from ...backtest import BacktestEngine, EngineConfig
 from ...exchanges import create_exchange
+from ...market_data.storage import load_ohlcv
 from ...orchestrator.main_loop import candles_to_df
 from ...strategies import default_ensemble
 from ..deps import current_user
@@ -23,20 +25,23 @@ async def run_backtest(
     bars: int = 1500,
     initial_equity: float = 10_000_000,
 ) -> dict:
-    exchange = create_exchange("upbit")
+    # Prefer DB (can serve thousands of bars), else live fetch (≤200 bars).
+    df: pd.DataFrame
     try:
-        # Upbit single-call limit is 200; stitch multiple calls
-        collected = []
-        remaining = bars
-        last = None  # pagination via 'to' not wired here → take what fits
-        per = min(200, remaining)
-        collected = await exchange.fetch_ohlcv(symbol, timeframe, per)
-        if len(collected) < 210:
-            raise HTTPException(400, f"insufficient history ({len(collected)})")
-    finally:
-        await exchange.close()
-
-    df = candles_to_df(collected)
+        rows = await load_ohlcv("upbit", symbol, timeframe, bars)
+    except Exception:
+        rows = []
+    if rows and len(rows) >= 210:
+        df = pd.DataFrame(rows)
+    else:
+        exchange = create_exchange("upbit")
+        try:
+            candles = await exchange.fetch_ohlcv(symbol, timeframe, 200)
+        finally:
+            await exchange.close()
+        if len(candles) < 200:
+            raise HTTPException(400, f"insufficient history ({len(candles)})")
+        df = candles_to_df(candles)
     engine = BacktestEngine(default_ensemble(), engine_config=EngineConfig(initial_equity=initial_equity))
     result, metrics = engine.run(df, symbol=symbol)
     return {
